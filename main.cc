@@ -1,9 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <omp.h>
 #include <time.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <errno.h>
+#include <signal.h>
+#include <omp.h>
 #include "global_variables.h"
+
+#ifdef USE_CUDA
+#include <cuda_runtime.h>
+#endif
 
 #ifdef USE_SINGLE_PRECISION
 typedef float REAL;
@@ -79,6 +87,7 @@ void read_ic(FILE *ic_file, int N);
 void read_param(FILE *param_file);
 void step(REAL** x, REAL** F);
 void kiiras(REAL** x);
+int mkdir_p(const char *path, mode_t mode);
 void Log_write(REAL** x);
 void forces_old(REAL** x, REAL** F);
 void forces_old_periodic(REAL**x, REAL**F);
@@ -90,6 +99,31 @@ int ewald_space(REAL R, int ewald_index[2102][4]);
 void rescaling();
 double CALCULATE_decel_param(double a, double a_prev1, double a_prev2, double h, double h_prev);
 
+// Signal handling for graceful shutdown
+volatile sig_atomic_t stop_requested = 0;
+
+void gpu_cleanup(void) {
+#ifdef USE_CUDA
+    fprintf(stderr, "\n[CCLEA] Waiting for GPU to finish...\n");
+    cudaError_t err = cudaDeviceSynchronize();
+    if (err != cudaSuccess) {
+        fprintf(stderr, "[CCLEA] GPU sync warning: %s\n",
+                cudaGetErrorString(err));
+    }
+    fprintf(stderr, "[CCLEA] GPU done.\n");
+#endif
+}
+
+
+// atexit handler that covers normal exit() and return from main
+void atexit_cleanup(void) {
+	gpu_cleanup();
+}
+
+// Signal handler that covers SIGINT, SIGTERM, SIGHUP, SIGQUIT
+void signal_cleanup_handler(int signum) {
+	stop_requested = 1;
+}
 
 void read_ic(FILE *ic_file, int N)
 {
@@ -128,6 +162,22 @@ fclose(ic_file);
 return;
 }
 
+int mkdir_p(const char *path, mode_t mode) {
+    char tmp[1100];
+    char *p = NULL;
+
+    snprintf(tmp, sizeof(tmp), "%s", path);
+
+    for (p = tmp + 1; *p; p++) {
+        if (*p == '/') {
+            *p = '\0';
+            if (mkdir(tmp, mode) != 0 && errno != EEXIST)
+                return -1;
+            *p = '/';
+        }
+    }
+    return mkdir(tmp, mode) != 0 && errno != EEXIST ? -1 : 0;
+}
 
 void kiiras(REAL** x)
 {
@@ -189,6 +239,20 @@ int main(int argc, char *argv[])
 {
 	printf("-------------------------------------------------------------------\nCCLEA v0.7.0.0\n (Cosmological Code with Local Expansion and Averaging)\n\n Gabor Racz, 2016\n Department of Physics of Complex Systems, Eötvös Loránd University\n\n");
 	printf("Build date: %zu\n-------------------------------------------------------------------\n\n", (unsigned long) &__BUILD_DATE);
+
+	atexit(atexit_cleanup);
+	{
+		struct sigaction sa;
+		memset(&sa, 0, sizeof(sa));
+		sa.sa_handler = signal_cleanup_handler;
+		sigemptyset(&sa.sa_mask);
+		sa.sa_flags = 0; // No SA_RESTART — let blocked syscalls return EINTR
+		sigaction(SIGINT,  &sa, NULL);
+		sigaction(SIGTERM, &sa, NULL);
+		sigaction(SIGHUP,  &sa, NULL);
+		sigaction(SIGQUIT, &sa, NULL);
+	}
+
 	int i;
 	RESTART = 0;
 	T_RESTART = 0;
@@ -200,6 +264,12 @@ int main(int argc, char *argv[])
 	}
 	FILE *param_file = fopen(argv[1], "r");
 	read_param(param_file);
+	// Creating output directory if it does not exist
+	if (mkdir_p(OUT_DIR, 0755) != 0) {
+		fprintf(stderr, "Error: could not create output directory '%s': %s\n",
+				OUT_DIR, strerror(errno));
+		return -1;
+	}
 	if(IS_PERIODIC>1)
 	{
 		el = ewald_space(3.6,e);
@@ -322,7 +392,6 @@ int main(int argc, char *argv[])
 	REAL SIM_start_time = (REAL) clock () / (REAL) CLOCKS_PER_SEC;
 	REAL SIM_omp_start_time = omp_get_wtime();
 	//Timing
-
 	//Initial force calculation
 	if(IS_PERIODIC < 2)
 	{
@@ -355,7 +424,7 @@ int main(int argc, char *argv[])
 	REAL T_prev,Hubble_param_prev;
 	T_prev = T;
 	Hubble_param_prev = Hubble_param;
-	for(t=0; a_tmp<a_max; t++)
+	for(t=0; a_tmp<a_max && !stop_requested; t++)
 	{
 		printf("\n\n----------------------------------------------------------------------------------------------\n");
 		if(COSMOLOGY == 1)
@@ -403,6 +472,11 @@ int main(int argc, char *argv[])
 		}
 	}
 	kiiras(x); //writing output
+	if (stop_requested) {
+		printf("\n\n----------------------------------------------------------------------------------------------\n");
+		printf("Simulation interrupted by user (SIGINT/SIGTERM). Final state saved.\n");
+		printf("----------------------------------------------------------------------------------------------\n");
+	}
 	printf("\n\n----------------------------------------------------------------------------------------------\n");
 	printf("The simulation ended. The final state:\n");
 	if(COSMOLOGY == 1)
@@ -430,5 +504,6 @@ int main(int argc, char *argv[])
 	//Timing
 	printf("CPU time = %lfs\n", SIM_end_time-SIM_start_time);
 	printf("RUN time = %lfs\n", SIM_omp_end_time-SIM_omp_start_time);
+	// gpu_cleanup() will fire via atexit handler on return
 	return 0;
 }

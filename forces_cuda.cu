@@ -3,6 +3,7 @@
 #include <math.h>
 #include <omp.h>
 #include <time.h>
+#include <signal.h>
 #include "global_variables.h"
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
@@ -20,6 +21,7 @@ extern int e[2202][4];
 extern REAL w[3];
 extern REAL G, M;
 extern int N, hl, el;
+extern volatile sig_atomic_t stop_requested;
 
 int ewald_space(REAL R, int ewald_index[2102][4]);
 
@@ -273,6 +275,17 @@ cudaError_t forces_old_cuda(REAL**x, REAL**F) //Force calculation on GPU
 		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching ForceKernel!\n", cudaStatus);
 		goto Error;
 	}
+	if (stop_requested) {
+        cudaMemcpy(F_tmp, dev_F, 3 * N * sizeof(REAL), cudaMemcpyDeviceToHost);
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < 3; j++)
+                F[i][j] = F_tmp[3 * i + j];
+        free(F_tmp); free(xx_tmp); free(xy_tmp); free(xz_tmp);
+        cudaFree(dev_xx); cudaFree(dev_xy); cudaFree(dev_xz);
+        cudaFree(dev_F); cudaFree(dev_SOFT_CONST);
+        fprintf(stderr, "\n[CCLEA] Signal caught during force calc — GPU idle, exiting cleanly.\n");
+        exit(128 + SIGINT);
+    }
 	// Copy output vector from GPU buffer to host memory.
 	cudaStatus = cudaMemcpy(F_tmp, dev_F, 3 * N * sizeof(REAL), cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
@@ -301,14 +314,14 @@ cudaError_t forces_old_cuda(REAL**x, REAL**F) //Force calculation on GPU
 	cudaFree(dev_xz);
 	cudaFree(dev_F);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
+
+	return cudaSuccess;
 Error:
 	cudaFree(dev_xx);
 	cudaFree(dev_xy);
 	cudaFree(dev_xz);
 	cudaFree(dev_F);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
 
 	return cudaStatus;
 }
@@ -442,6 +455,17 @@ cudaError_t forces_old_periodic_cuda(REAL**x, REAL**F) //Force calculation with 
 		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching ForceKernel_periodic!\n", cudaStatus);
 		goto Error;
 	}
+	if (stop_requested) {
+        cudaMemcpy(F_tmp, dev_F, 3 * N * sizeof(REAL), cudaMemcpyDeviceToHost);
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < 3; j++)
+                F[i][j] = F_tmp[3 * i + j];
+        free(F_tmp); free(xx_tmp); free(xy_tmp); free(xz_tmp);
+        cudaFree(dev_xx); cudaFree(dev_xy); cudaFree(dev_xz);
+        cudaFree(dev_F); cudaFree(dev_SOFT_CONST);
+        fprintf(stderr, "\n[CCLEA] Signal caught during force calc — GPU idle, exiting cleanly.\n");
+        exit(128 + SIGINT);
+    }
 	// Copy output vector from GPU buffer to host memory.
 	cudaStatus = cudaMemcpy(F_tmp, dev_F, 3 * N * sizeof(REAL), cudaMemcpyDeviceToHost);
 	if (cudaStatus != cudaSuccess) {
@@ -471,7 +495,8 @@ cudaError_t forces_old_periodic_cuda(REAL**x, REAL**F) //Force calculation with 
 	cudaFree(dev_F);
 	cudaFree(dev_e);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
+
+	return cudaSuccess;
 Error:
 	cudaFree(dev_xx);
 	cudaFree(dev_xy);
@@ -479,7 +504,6 @@ Error:
 	cudaFree(dev_F);
 	cudaFree(dev_e);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
 
 	return cudaStatus;
 }
