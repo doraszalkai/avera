@@ -1,0 +1,26 @@
+name: avera
+channels:
+  - conda-forge
+dependencies:
+  - cuda-nvcc=13.0
+  - cuda-cudart-dev=13.0
+  - cuda-toolkit=13.0
+  - cmake
+  - make
+  - pkg-config
+  - git
+  - ccache
+  - autoconf
+  - automake
+  - libtool
+  - m4
+  - boost-cpp
+  - gsl
+  - cgal
+  - gmp
+  - mpfr
+  - eigen
+  - openmpi
+  - voro
+  - libstdcxx-ng
+  - libgcc-ng
