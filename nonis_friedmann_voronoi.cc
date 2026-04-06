@@ -1,3 +1,5 @@
+#include "config.hh"
+#include "common.hh"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
