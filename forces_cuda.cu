@@ -301,14 +301,15 @@ cudaError_t forces_old_cuda(REAL**x, REAL**F) //Force calculation on GPU
 	cudaFree(dev_xz);
 	cudaFree(dev_F);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
+	//cudaThreadExit();
+	return cudaSuccess;
 Error:
 	cudaFree(dev_xx);
 	cudaFree(dev_xy);
 	cudaFree(dev_xz);
 	cudaFree(dev_F);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
+	//cudaThreadExit();
 
 	return cudaStatus;
 }
@@ -471,7 +472,8 @@ cudaError_t forces_old_periodic_cuda(REAL**x, REAL**F) //Force calculation with 
 	cudaFree(dev_F);
 	cudaFree(dev_e);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
+	//cudaThreadExit();
+	return cudaSuccess;
 Error:
 	cudaFree(dev_xx);
 	cudaFree(dev_xy);
@@ -479,7 +481,7 @@ Error:
 	cudaFree(dev_F);
 	cudaFree(dev_e);
 	cudaFree(dev_SOFT_CONST);
-	cudaThreadExit();
+	//cudaThreadExit();
 
 	return cudaStatus;
 }

@@ -1,0 +1,117 @@
+Force calculation finished.
+Force CPU time = 1554.233339s
+Force RUN time = 130.639258s
+DTFE starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 1543.09
+...DTFE done.
+DTFE CPU time = 8.306209s
+DTFE RUN time = 1.562789s
+delta_a_effective = 0.0454188    delta_a_homogeneous = 0.0201204
+Calculating smoothing length...
+The new smoothing length:       beta = 0.098817
+Omega_m_eff = 0.195654
+KDK Leapfrog integration...done.
+Timestep CPU time = 1562.656854s
+Timestep RUN time = 132.301771s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 179, t=10.11961181Gy, h=0.052943Gy, a=9.85960916, H=87.03742349km/s/Mpc, z=0.01423899:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1492.163458s
+Force RUN time = 126.094267s
+DTFE starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 1580.96
+...DTFE done.
+DTFE CPU time = 10.832811s
+DTFE RUN time = 2.313186s
+delta_a_effective = 0.0464766    delta_a_homogeneous = 0.020542
+Calculating smoothing length...
+The new smoothing length:       beta = 0.098353
+Omega_m_eff = 0.194642
+KDK Leapfrog integration...done.
+Timestep CPU time = 1503.199291s
+Timestep RUN time = 128.574572s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 180, t=10.17255436Gy, h=0.052375Gy, a=9.90608576, H=86.64986651km/s/Mpc, z=0.00948046:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1492.807383s
+Force RUN time = 125.712749s
+DTFE starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 1569.16
+...DTFE done.
+DTFE CPU time = 8.467653s
+DTFE RUN time = 1.581500s
+delta_a_effective = 0.0459644    delta_a_homogeneous = 0.0202742
+Calculating smoothing length...
+The new smoothing length:       beta = 0.097899
+Omega_m_eff = 0.193915
+KDK Leapfrog integration...done.
+Timestep CPU time = 1501.403622s
+Timestep RUN time = 127.401194s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 181, t=10.22492945Gy, h=0.051332Gy, a=9.95205020, H=86.21151640km/s/Mpc, z=0.00481808:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1551.439877s
+Force RUN time = 130.538402s
+DTFE starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 1593.45
+...DTFE done.
+DTFE CPU time = 8.263353s
+DTFE RUN time = 1.601845s
+delta_a_effective = 0.0450183    delta_a_homogeneous = 0.0198246
+Calculating smoothing length...
+The new smoothing length:       beta = 0.097458
+Omega_m_eff = 0.193373
+KDK Leapfrog integration...done.
+Timestep CPU time = 1559.835494s
+Timestep RUN time = 132.250014s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 182, t=10.27626107Gy, h=0.050960Gy, a=9.99706848, H=85.74970458km/s/Mpc, z=0.00029324:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1545.451720s
+Force RUN time = 129.965088s
+DTFE starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 1590.74
+...DTFE done.
+DTFE CPU time = 8.094341s
+DTFE RUN time = 1.518782s
+delta_a_effective = 0.0446932    delta_a_homogeneous = 0.019637
+Calculating smoothing length...
+The new smoothing length:       beta = 0.097025
+Omega_m_eff = 0.192376
+KDK Leapfrog integration...done.
+Timestep CPU time = 1553.673338s
+Timestep RUN time = 131.592941s
+Saving: t= 10.500000, file: "./BR/t1050.dat" 
+
+
+----------------------------------------------------------------------------------------------
+The simulation ended. The final state:
+Timestep 183, t=10.32722141Gy, h=0.050397, a=10.04176172, H=85.39827181, z=-0.00415880
+
+At a = 10.000000 state, with linear interpolation:
+t=10.27960366Gy, a=10.00000000, H=85.72665342km/s/Mpc
+
+Running time of the simulation:
+CPU time = 281161.184451s
+RUN time = 23954.247714s

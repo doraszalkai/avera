@@ -1,0 +1,118 @@
+Force calculation finished.
+Force CPU time = 1485.405120s
+Force RUN time = 125.309609s
+CIC density estimation starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 721.417
+...CIC done.
+CIC CPU time = 0.029389s
+CIC RUN time = 0.005142s
+delta_a_effective = 0.0269497    delta_a_homogeneous = 0.0167079
+Calculating smoothing length...
+The new smoothing length:       beta = 0.098374
+Omega_m_eff = 0.383447
+KDK Leapfrog integration...done.
+Timestep CPU time = 1485.536449s
+Timestep RUN time = 125.416574s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 298, t=15.04940680Gy, h=0.043927Gy, a=9.90399612, H=61.75486980km/s/Mpc, z=0.00969345:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1465.447752s
+Force RUN time = 123.578817s
+CIC density estimation starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 723.86
+...CIC done.
+CIC CPU time = 0.024477s
+CIC RUN time = 0.005113s
+delta_a_effective = 0.0274906    delta_a_homogeneous = 0.0170071
+Calculating smoothing length...
+The new smoothing length:       beta = 0.098102
+Omega_m_eff = 0.381711
+KDK Leapfrog integration...done.
+Timestep CPU time = 1465.571461s
+Timestep RUN time = 123.683178s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 299, t=15.09333364Gy, h=0.044927Gy, a=9.93148674, H=61.63833468km/s/Mpc, z=0.00689859:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1460.909550s
+Force RUN time = 122.797732s
+CIC density estimation starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 726.567
+...CIC done.
+CIC CPU time = 0.028775s
+CIC RUN time = 0.005554s
+delta_a_effective = 0.0281379    delta_a_homogeneous = 0.01737
+Calculating smoothing length...
+The new smoothing length:       beta = 0.097825
+Omega_m_eff = 0.380041
+KDK Leapfrog integration...done.
+Timestep CPU time = 1461.044040s
+Timestep RUN time = 122.909001s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 300, t=15.13826028Gy, h=0.044758Gy, a=9.95962463, H=61.51194573km/s/Mpc, z=0.00405390:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1461.021762s
+Force RUN time = 122.838520s
+CIC density estimation starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 729.472
+...CIC done.
+CIC CPU time = 0.028187s
+CIC RUN time = 0.005417s
+delta_a_effective = 0.0280464    delta_a_homogeneous = 0.0172802
+Calculating smoothing length...
+The new smoothing length:       beta = 0.097550
+Omega_m_eff = 0.378685
+KDK Leapfrog integration...done.
+Timestep CPU time = 1461.149284s
+Timestep RUN time = 122.943311s
+
+
+----------------------------------------------------------------------------------------------
+Timestep 301, t=15.18301780Gy, h=0.043522Gy, a=9.98767100, H=61.36265371km/s/Mpc, z=0.00123442:
+KDK Leapfrog integration...
+Calculating Forces...
+Force calculation finished.
+Force CPU time = 1462.039674s
+Force RUN time = 123.089543s
+CIC density estimation starting...
+The minimal and the maximal density (in Omega_m):
+ Rho_min = 0     Rho_max = 732.422
+...CIC done.
+CIC CPU time = 0.032529s
+CIC RUN time = 0.005802s
+delta_a_effective = 0.0272781    delta_a_homogeneous = 0.0167798
+Calculating smoothing length...
+The new smoothing length:       beta = 0.097284
+Omega_m_eff = 0.377594
+KDK Leapfrog integration...done.
+Timestep CPU time = 1462.174827s
+Timestep RUN time = 123.197810s
+Saving: t= 15.500000, file: "./BR/t1550.dat" 
+
+
+----------------------------------------------------------------------------------------------
+The simulation ended. The final state:
+Timestep 302, t=15.22653963Gy, h=0.043835, a=10.01494915, H=61.20030711, z=-0.00149268
+
+At a = 10.000000 state, with linear interpolation:
+t=15.20268852Gy, a=10.00000000, H=61.28927734km/s/Mpc
+
+Running time of the simulation:
+CPU time = 459322.955924s
+RUN time = 39189.218736s
+szadora@DESKTOP-FR00Q4H:~/avera/avera$ 

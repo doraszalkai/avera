@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "global_variables.h"
+#include <cmath>
 
 #ifdef USE_SINGLE_PRECISION
 typedef float REAL;
@@ -27,36 +28,47 @@ double friedmann_solver_start(double a0, double t0, double h, double Omega_lambd
 	double Omega_k = 1.-Omega_m-Omega_lambda-Omega_r;
 	//Solving the "da/dt = a*H0*sqrt(Omega_m*pow(a, -3)+Omega_r*pow(a, -4)+Omega_lambda)" differential equation
 	b_tmp = b;
-	while(0<b)
-	{
-		b_tmp = b;
-		b = friedman_solver_step(b, -h, Omega_lambda, Omega_r, Omega_m, Omega_k, H0);
+	long loop1 = 0;
+    while(0<b)
+    {
+        b_tmp = b;
+        b = friedman_solver_step(b, -h, Omega_lambda, Omega_r, Omega_m, Omega_k, H0);
+        if (std::isnan(b)) { 
+            b = -1.0; 
+            break;
+        }
 		t_cosm -= h;
-	}
+        loop1++;
+        if (loop1 % 1000000 == 0) printf("1. ciklus fut: b = %e, ido = %e\n", b, t_cosm);
+    }
 	t_bigbang=t_cosm+h; //rough estimation for t_bibgang.
 	b = b_tmp;
 	printf("First guess: %.12f Gy\n\n", -t_bigbang*47.1482347621227);
 	//Searching for t_start.
-	h_var = -0.5*h;
-	while(fabs(h_var)>t_start_err)
-	{
-		b_tmp = b;
-		b = friedman_solver_step(b, h_var, Omega_lambda, Omega_r, Omega_m, Omega_k, H0);
+	long loop2 = 0;
+    h_var = -0.5*h;
+    while(fabs(h_var)>t_start_err)
+    {
+        b_tmp = b;
+        b = friedman_solver_step(b, h_var, Omega_lambda, Omega_r, Omega_m, Omega_k, H0);
+        if (std::isnan(b)) { 
+            b = -1.0; 
+        }
 		t_cosm_tmp = t_cosm;
-		t_cosm=t_cosm+h_var;
-		if(b>0)
-		{
-			//printf("After BB: t=%.15e\th_var=%e\n", t_cosm*47.1482347621227, h_var);
-			//h_var=0.5*h_var;
-		}
-		else
-		{
-			//printf("Before BB: t=%.15e\th_var=%e\n", t_cosm*47.1482347621227, h_var);
-			b = b_tmp;
-			t_cosm = t_cosm_tmp;
-			h_var=0.5*h_var;
-		}
-	}
+        t_cosm=t_cosm+h_var;
+        if(b>0)
+        {
+            // üres
+        }
+        else
+        {
+            b = b_tmp;
+            t_cosm = t_cosm_tmp;
+            h_var=0.5*h_var;
+        }
+        loop2++;
+        if (loop2 % 1000 == 0) printf("2. ciklus fut: b = %e, h_var = %e\n", b, h_var);
+    }
 	t_bigbang = t_cosm;
 	//Setting t=0 to Big Bang:
 	t_start =  -1.0 * t_bigbang;

@@ -35,7 +35,7 @@ char periodic_str[11];
 sprintf(periodic_str, "--periodic");
 char box_str[6];
 sprintf(box_str, "--box");
-char verbose_str[7];
+char verbose_str[16];
 sprintf(verbose_str, "--verbose");
 char DTFE_str[5];
 sprintf(DTFE_str, "DTFE");
