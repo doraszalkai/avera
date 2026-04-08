@@ -13,7 +13,7 @@ a_start		0.1
 NONISOTROPIC_EXPANSION	3
 
 LOC_CURV	1
-DENSITY_CELLS	64
+DENSITY_CELLS	256
 
 Parameters of the simulation:
 -----------------------------
